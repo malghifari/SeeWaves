@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "353615972719",
+    "firebase_url": "https://seewaves-8b5ee.firebaseio.com",
+    "project_id": "seewaves-8b5ee",
+    "storage_bucket": "seewaves-8b5ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353615972719:android:f9dc3f4dafefcd3e",
+        "android_client_info": {
+          "package_name": "com.sah.seewaves"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "353615972719-b2g91mtk5925je96o7qi51i8l8nnhnud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk9xdToet5LPJI1YW-sBtQmJelsTwJVSk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
