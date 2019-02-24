@@ -24,7 +24,6 @@ public class TsunamiTrigger {
 
     public TsunamiTrigger() {
         mListOfPlaceReference = FirebaseDatabase.getInstance().getReference("places");
-        mPlaceReference = FirebaseDatabase.getInstance().getReference("places");
         listOfPlaceListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -43,19 +42,6 @@ public class TsunamiTrigger {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
-
-        placeListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Place place = dataSnapshot.getValue(Place.class);
-                Log.d(TAG, "Changed Place: " + place.name + ", " + place.latitude + ", " + place.longitude + ", " + place.status);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        mPlaceReference.addValueEventListener(placeListener);
-
         mListOfPlaceReference.addChildEventListener(listOfPlaceListener);
     }
 
@@ -66,10 +52,4 @@ public class TsunamiTrigger {
         childUpdates.put("/" + place.name, placeValues);
         mListOfPlaceReference.updateChildren(childUpdates);
     }
-
-    public void writePlaceWithSetValue(String name, Double latitude, Double longitude, String status) {
-        Place place = new Place(name,latitude,longitude,status);
-        mListOfPlaceReference.child(place.name).setValue(place);
-    }
-
 }

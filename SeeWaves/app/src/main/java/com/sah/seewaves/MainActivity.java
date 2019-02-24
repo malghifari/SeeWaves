@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements
     private String mUsername;
     private String mPhotoUrl;
     private GoogleApiClient mGoogleApiClient;
+    private static TsunamiTrigger mTsunamiTrigger = null;
 
     public static final String ANONYMOUS = "anonymous";
     private static final String TAG = "MainActivity";
@@ -92,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements
                 finish();
                 return true;
             case R.id.action_settings:
-                TsunamiTrigger tsunamiTrigger = new TsunamiTrigger();
-                tsunamiTrigger.writePlaceWithSetValue("Rancabuaya", -6.893346, 107.610039, "safe");
+                getTsunamiTrigger().writePlaceWithUpdateChildren("Rancabuaya", -6.893346, 107.610039, "safe");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public static TsunamiTrigger getTsunamiTrigger()  {
+        if (mTsunamiTrigger == null)   {
+            mTsunamiTrigger = new TsunamiTrigger();
+        }
+        return mTsunamiTrigger;
     }
 
 }
