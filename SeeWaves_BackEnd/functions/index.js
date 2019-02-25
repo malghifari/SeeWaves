@@ -83,9 +83,8 @@ exports.addPlace = functions.https.onRequest((req, res) => {
     const data = change.after.val();
     console.log(data);
       if(data.status === "danger") {
-        const payload = {notification: {
-            title: 'Bahaya',
-            body: 'Terdapat potensi tsunami di ' + data.name,
+        const payload = {data: {
+            title: 'Danger',
             name: data.name,
             latitude: `${data.latitude}`,
             longitude: `${data.longitude}`,
