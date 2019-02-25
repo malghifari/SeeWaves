@@ -11,4 +11,11 @@
     <string name="invitation_cta">Call to action</string>
     <string name="fresh_config">Fresh Config</string>
     <string name="cause_crash">Cause Crash</string>
+    <string name="news"> Telah terdeteksi potensi tsunami dengan detail sebagai berikut.</string>
+    <string name="location">test</string>
+    <string name="time">test</string>
+    <string name="title">TERDETEKSI POTENSI TSUNAMI</string>
+    <string name="detail">Lokasi</string>
+    <string name="longitude">Longitude : </string>
+    <string name="latitude">Latitude :</string>
 </resources>
