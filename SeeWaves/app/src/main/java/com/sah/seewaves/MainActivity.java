@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sah.seewaves.models.Place;
 
 public class MainActivity extends AppCompatActivity implements
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private static TsunamiTrigger mTsunamiTrigger = null;
     private static Place myPlace;
+    private static boolean subscribeTopic = false;
 
     public static final String ANONYMOUS = "anonymous";
     private static final String TAG = "MainActivity";
@@ -86,6 +88,19 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
+        if (!subscribeTopic) {
+            FirebaseMessaging.getInstance().subscribeToTopic("seewaves")
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            String msg = "Seewaves Subscribed";
+                            if (!task.isSuccessful()) {
+                                msg = "Failed to subscribe";
+                            }
+                            Log.d(TAG, msg);
+                        }
+                    });
+        }
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -103,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements
         myPlace.longitude = location.getLongitude();
         myPlace.latitude = location.getLatitude();
         Log.d(TAG, "myPlace (latitude, longitude): " + myPlace.latitude + ", " + myPlace.longitude);
-        getTsunamiTrigger().writePlaceWithUpdateChildren("Rancabuaya", -6.893346, 107.610039, "safe");
+        TsunamiTrigger trigger = getTsunamiTrigger();
     }
 
     @Override

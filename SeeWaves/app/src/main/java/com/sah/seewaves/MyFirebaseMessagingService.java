@@ -1,13 +1,18 @@
 package com.sah.seewaves;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -16,6 +21,7 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.sah.seewaves.models.Place;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -63,6 +69,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         }
 
+
+//        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//
+//        Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        Location tsunamiLocation = new Location("Potential Tsunami Location");
+//        tsunamiLocation.setLatitude(place.latitude);
+//        tsunamiLocation.setLongitude(place.longitude);
+//        float distance = myLocation.distanceTo(location);
+//        if (distance > 10000) {
+//            Log.d(TAG, "Distance: " + distance);
+//        }
+        Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());

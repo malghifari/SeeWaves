@@ -41,6 +41,7 @@ exports.changeStatus = functions.https.onRequest((req, res) => {
   const name = req.query.name;
   const xstatus = req.query.status;
   return admin.database().ref('/places/' + name + '/status').set(xstatus).then((snapshot) => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
     return res.redirect(303, snapshot.ref.toString());
   });
 });
@@ -51,6 +52,54 @@ exports.addPlace = functions.https.onRequest((req, res) => {
   const longitude = req.query.longitude;
   const status = req.query.status;
   return admin.database().ref('/places/' + name).set({name : name, latitude : latitude, longitude : longitude, status : status}).then((snapshot) => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
     return res.redirect(303, snapshot.ref.toString());
   });
 });
+
+
+// exports.sendAdminNotification = functions.database.ref('/places/{name}/status').onWrite((change, context) => {
+//   const status = change.after.val();
+//   console.log('Status: ', status);
+//     if(status === "danger") {
+//       const payload = {notification: {
+//           title: 'Bahaya',
+//           body: 'Terdapat potensi tsunami di daerah ' + context.params.name
+//         }
+//       };
+//       return admin.messaging().sendToTopic("seewaves",payload)
+//         .then(function(response){
+//           console.log('Notification sent successfully:',response,payload);
+//           return;
+//         }) 
+//         .catch(function(error){
+//           console.log('Notification sent failed:',error,payload);
+//           return;
+//         });
+//       }
+//   });
+
+  exports.sendAdminNotification2 = functions.database.ref('/places/{name}').onWrite((change, context) => {
+    const data = change.after.val();
+    console.log(data);
+      if(data.status === "danger") {
+        const payload = {notification: {
+            title: 'Bahaya',
+            body: 'Terdapat potensi tsunami di ' + data.name,
+            name: data.name,
+            latitude: `${data.latitude}`,
+            longitude: `${data.longitude}`,
+            status: data.status
+          }
+        };
+        return admin.messaging().sendToTopic("seewaves",payload)
+          .then(function(response){
+            console.log('Notification sent successfully:',response,payload);
+            return;
+          }) 
+          .catch(function(error){
+            console.log('Notification sent failed:',error,payload);
+            return;
+          });
+        }
+    });

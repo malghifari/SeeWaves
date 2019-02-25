@@ -15,4 +15,11 @@
     <string name="log_token">Log Token</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
+    <string name="msg_subscribed">Success</string>
+    <string name="msg_subscribe_failed">Failed</string>
+    <string name="profile_photo">Profile Picture</string>
+    <string name="profile">Profile</string>
+    <string name="warning_setting">Warning Setting</string>
+    <string name="email_setting">Email Setting</string>
+    <string name="game">Game</string>
 </resources>
