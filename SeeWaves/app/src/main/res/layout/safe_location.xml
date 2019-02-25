@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wave"
+    tools:context=".SafeLocation">
+
+
+    <ImageView
+        android:id="@+id/skull"
+        app:srcCompat="@drawable/skull"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"/>
+
+    <ImageView
+        android:id="@+id/hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/hand"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/skull"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:text="@string/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/hand"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/detail"
+        android:text="@string/detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/title"/>
+
+    <TextView
+        android:id="@+id/longitude"
+        android:text="@string/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/detail"/>
+
+    <TextView
+        android:id="@+id/latitude"
+        android:text="@string/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/longitude"/>
+
+    <Button
+        android:id="@+id/safe_location"
+        android:background="@drawable/safe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openmaps"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/latitude"
+        android:layout_marginTop="30dp"/>
+
+</RelativeLayout>

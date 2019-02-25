@@ -22,4 +22,11 @@
     <string name="warning_setting">Warning Setting</string>
     <string name="email_setting">Email Setting</string>
     <string name="game">Game</string>
+    <string name="news"> Telah terdeteksi potensi tsunami dengan detail sebagai berikut.</string>
+    <string name="location">test</string>
+    <string name="time">test</string>
+    <string name="title">TERDETEKSI POTENSI TSUNAMI</string>
+    <string name="detail">Lokasi</string>
+    <string name="longitude">Longitude : </string>
+    <string name="latitude">Latitude :</string>
 </resources>
