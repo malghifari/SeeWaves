@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Timeline extends AppCompatActivity {
+public class Timeline extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private LinearLayout parentLinearLayout;
     private TextView time;
     private TextView location;
@@ -35,10 +37,22 @@ public class Timeline extends AppCompatActivity {
         setContentView(R.layout.timeline_layout);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_timeline_layout);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         mToogle = new ActionBarDrawerToggle(this,mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToogle);
         mToogle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.set_email:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SetEmail()).commit();
+                break;
+        }
+        return true;
     }
 
     @Override
