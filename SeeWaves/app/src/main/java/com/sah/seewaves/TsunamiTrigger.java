@@ -1,5 +1,6 @@
 package com.sah.seewaves;
 
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,8 +22,9 @@ public class TsunamiTrigger {
     private ChildEventListener listOfPlaceListener;
     private ValueEventListener placeListener;
     private DatabaseReference mPlaceReference;
+    private Place myPlace;
 
-    public TsunamiTrigger() {
+    public TsunamiTrigger(final Place myPlace) {
         mListOfPlaceReference = FirebaseDatabase.getInstance().getReference("places");
         listOfPlaceListener = new ChildEventListener() {
             @Override
@@ -34,6 +36,18 @@ public class TsunamiTrigger {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Place place = dataSnapshot.getValue(Place.class);
                 Log.d(TAG, "Changed Place: " + place.name + ", " + place.latitude + ", " + place.longitude + ", " + place.status);
+                if (place.status.equals("danger")) {
+                    Location myLocation = new Location("My Location");
+                    myLocation.setLatitude(myPlace.latitude);
+                    myLocation.setLongitude(myPlace.longitude);
+                    Location location = new Location("Potential Tsunami Location");
+                    location.setLatitude(place.latitude);
+                    location.setLongitude(place.longitude);
+                    float distance = myLocation.distanceTo(location);
+                    if (distance > 10000) {
+                        Log.d(TAG, "Distance: " + distance);
+                    }
+                }
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
@@ -43,6 +57,8 @@ public class TsunamiTrigger {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
         mListOfPlaceReference.addChildEventListener(listOfPlaceListener);
+
+        this.myPlace = myPlace;
     }
 
     public void writePlaceWithUpdateChildren(String name, Double latitude, Double longitude, String status) {
