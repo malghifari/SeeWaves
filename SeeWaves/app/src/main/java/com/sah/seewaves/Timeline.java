@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,12 +26,27 @@ public class Timeline extends AppCompatActivity {
     private String latitude = "-6.891172";
     String share;
     private Date currentTime = Calendar.getInstance().getTime();
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToogle;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline_layout);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_timeline_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mToogle = new ActionBarDrawerToggle(this,mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToogle);
+        mToogle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (mToogle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onAddField(View v) {
