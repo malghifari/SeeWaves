@@ -83,7 +83,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             Toast.makeText(this, "Welcome " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
             // Go back to the main activity
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, Timeline.class));
         }
     }
 
@@ -139,7 +139,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d(TAG, "mauMasukMain");
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                            startActivity(new Intent(SignInActivity.this, Timeline.class));
                             finish();
                         }
                     }
