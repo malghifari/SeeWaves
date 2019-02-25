@@ -41,6 +41,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignInActivity" />
+        <activity android:name=".Timeline" />
+        <activity android:name=".SafeLocation" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -56,8 +58,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Timeline" />
-        <activity android:name=".SafeLocation" />
 
     </application>
 

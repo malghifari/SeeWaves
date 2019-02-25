@@ -29,4 +29,6 @@
     <string name="detail">Lokasi</string>
     <string name="longitude">Longitude : </string>
     <string name="latitude">Latitude :</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
