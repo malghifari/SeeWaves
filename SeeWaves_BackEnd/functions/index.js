@@ -36,3 +36,21 @@ exports.makeUppercase = functions.database.ref('/messages/{pushId}/original')
       // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
       return snapshot.ref.parent.child('uppercase').set(uppercase);
     });
+
+exports.changeStatus = functions.https.onRequest((req, res) => {
+  const name = req.query.name;
+  const xstatus = req.query.status;
+  return admin.database().ref('/places/' + name + '/status').set(xstatus).then((snapshot) => {
+    return res.redirect(303, snapshot.ref.toString());
+  });
+});
+
+exports.addPlace = functions.https.onRequest((req, res) => {
+  const name = req.query.name;
+  const latitude = req.query.latitude;
+  const longitude = req.query.longitude;
+  const status = req.query.status;
+  return admin.database().ref('/places/' + name).set({name : name, latitude : latitude, longitude : longitude, status : status}).then((snapshot) => {
+    return res.redirect(303, snapshot.ref.toString());
+  });
+});
