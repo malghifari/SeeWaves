@@ -79,26 +79,48 @@ exports.addPlace = functions.https.onRequest((req, res) => {
 //       }
 //   });
 
-  exports.sendAdminNotification2 = functions.database.ref('/places/{name}').onWrite((change, context) => {
-    const data = change.after.val();
-    console.log(data);
-      if(data.status === "danger") {
-        const payload = {data: {
-            title: 'Danger',
-            name: data.name,
-            latitude: `${data.latitude}`,
-            longitude: `${data.longitude}`,
-            status: data.status
-          }
-        };
-        return admin.messaging().sendToTopic("seewaves",payload)
-          .then(function(response){
-            console.log('Notification sent successfully:',response,payload);
-            return;
-          }) 
-          .catch(function(error){
-            console.log('Notification sent failed:',error,payload);
-            return;
-          });
+exports.sendAdminNotification2 = functions.database.ref('/places/{name}').onWrite((change, context) => {
+  const data = change.after.val();
+  console.log(data);
+    if(data.status === "danger") {
+      const payload = {data: {
+          title: 'Danger',
+          name: data.name,
+          latitude: `${data.latitude}`,
+          longitude: `${data.longitude}`,
+          status: data.status
         }
+      };
+      return admin.messaging().sendToTopic("seewaves",payload)
+        .then(function(response){
+          console.log('Notification sent successfully:',response,payload);
+          return;
+        }) 
+        .catch(function(error){
+          console.log('Notification sent failed:',error,payload);
+          return;
+        });
+      }
+      return;
+  });
+
+exports.updateNews = functions.database.ref('/places/{name}').onWrite((change, context) => {
+  const data = change.after.val();
+  var date = new Date();
+  now = date.toDateString();
+  if (data.status === "danger")  {
+    return admin.database().ref('/news')
+    .push({
+      name : data.name,
+      latitude : data.latitude,
+      longitude : data.longitude,
+      status : data.status,
+      date : now
+    }).then((snapshot) => {
+      // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+      return res.redirect(303, snapshot.ref.toString());
     });
+  }
+  return;
+});
+
