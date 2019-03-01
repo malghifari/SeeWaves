@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -34,6 +35,14 @@ public class SafeLocation extends AppCompatActivity implements LocationListener,
     LocationManager locationManager;
     Location targetLocation = new Location("");//provider name is unnecessary
 
+    private SensorManager mSensorManager = null;
+    private Sensor mAccelerometer = null;
+    private long lastUpdate = 0;
+    private Float last_x = 0.0f;
+    private Float last_y = 0.0f;
+    private Float last_z = 0.0f;
+    private static int SHAKE_THRESHOLD = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +50,11 @@ public class SafeLocation extends AppCompatActivity implements LocationListener,
         CheckPermission();
         targetLocation.setLatitude(-6.891172);//your coords of course
         targetLocation.setLongitude(107.609687);
+
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void openmaps(View view) {
@@ -143,27 +157,48 @@ public class SafeLocation extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        Sensor sensor = event.sensor;
+        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if (curTime - lastUpdate > 100) {
+                long diffTime = curTime - lastUpdate;
+                lastUpdate = curTime;
 
-        float degree = Math.round(event.values[0]);
-        Log.d(TAG, "will set rotation " + degree +" degree");
-        degree = (bearing - degree) * -1;
-        degree = normalizeDegree(degree);
-        RotateAnimation ra = new RotateAnimation(
-                currentDegree,
-                -degree,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f);
+                float x = event.values[SensorManager.DATA_X];
+                float y = event.values[SensorManager.DATA_Y];
+                float z = event.values[SensorManager.DATA_Z];
 
-        // how long the animation will take place
-        ra.setDuration(500);
-        ra.setRepeatCount(0);
-        // set the animation after the end of the reservation status
-        ra.setFillAfter(true);
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
-        // Start the animation
-        hand.startAnimation(ra);
-        currentDegree = -degree;
+                if (speed > SHAKE_THRESHOLD) {
+                    Log.d("sensor", "shake detected w/ speed: " + speed);
+                    Toast.makeText(this, "shake detected w/ speed: " + speed, Toast.LENGTH_SHORT).show();
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        } else {
+            float degree = Math.round(event.values[0]);
+            Log.d(TAG, "will set rotation " + degree + " degree");
+            degree = (bearing - degree) * -1;
+            degree = normalizeDegree(degree);
+            RotateAnimation ra = new RotateAnimation(
+                    currentDegree,
+                    -degree,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f);
+            // how long the animation will take place
+            ra.setDuration(500);
+            ra.setRepeatCount(0);
+            // set the animation after the end of the reservation status
+            ra.setFillAfter(true);
+            // Start the animation
+            hand.startAnimation(ra);
+            currentDegree = -degree;
+        }
     }
 
     @Override

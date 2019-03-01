@@ -1,5 +1,6 @@
 package com.sah.seewaves;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -123,15 +124,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     public boolean isInDanger(Float tLatitude, Float tLongitude) {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
-
-        Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Location tsunamiLocation = new Location("Potential Tsunami Location");
+//        Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location myLocation = new Location("My Location");
+        myLocation.setLatitude(tLatitude - 0.031);
+        myLocation.setLongitude(tLongitude - 0.041);
+        Location tsunamiLocation = new Location("Lokasi potensi tsunami");
         tsunamiLocation.setLatitude(tLatitude);
         tsunamiLocation.setLongitude(tLongitude);
+        Log.d(TAG, "myLocation: " + myLocation.toString() + ", tsunamiLocation: " + tsunamiLocation.toString());
         distance = myLocation.distanceTo(tsunamiLocation);
         if (distance < 10000) {
             return true;
