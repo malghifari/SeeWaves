@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,12 +30,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.sah.seewaves.models.News;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 public class Timeline extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
-    private LinearLayout parentLinearLayout;
     private TextView time;
     private TextView location;
     private String longitude = "107.609687";
@@ -52,6 +56,11 @@ public class Timeline extends AppCompatActivity implements NavigationView.OnNavi
 
     public static final String ANONYMOUS = "anonymous";
     private static final String TAG = "Timeline";
+    private static NewsTrigger newsTrigger = null;
+
+    private RecyclerView mRecyclerView;
+    private NewsListAdapter mAdapter;
+    private LinkedList<News> mNewsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +100,6 @@ public class Timeline extends AppCompatActivity implements NavigationView.OnNavi
                     });
         }
 
-        parentLinearLayout = (LinearLayout) findViewById(R.id.parent_timeline_layout);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,6 +110,28 @@ public class Timeline extends AppCompatActivity implements NavigationView.OnNavi
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
+
+        NewsTrigger newsTrigger = getNewsTrigger();
+        mNewsList = newsTrigger.getNewsList();
+
+        // Create recycler view.
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new NewsListAdapter(this, mNewsList);
+        // Connect the adapter with the recycler view.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the recycler view a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        newsTrigger.setRecyclerView(mRecyclerView);
+
+    }
+
+    public static NewsTrigger getNewsTrigger() {
+        if (newsTrigger == null) {
+            newsTrigger = new NewsTrigger();
+        }
+        return  newsTrigger;
     }
 
     @Override
@@ -127,24 +157,6 @@ public class Timeline extends AppCompatActivity implements NavigationView.OnNavi
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onAddField(View v) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.field, null);
-
-        time = (TextView) rowView.findViewById(R.id.time);
-        time.setText("Time: " + String.valueOf(currentTime));
-
-        location = (TextView) rowView.findViewById(R.id.location);
-        location.setText("Longitude: " + longitude + ", Latitude: " + latitude);
-
-        // Add the new row before the add field button.
-        parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount() - 1);
-    }
-
-    public void onDelete(View v) {
-        parentLinearLayout.removeView((View) v.getParent());
     }
 
     public void share_news(View view) {

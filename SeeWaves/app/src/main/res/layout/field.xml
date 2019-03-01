@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#0072B5">
+    android:background="#FFFFFF">
 
     <Button
         android:id="@+id/delete_button"
@@ -11,6 +12,7 @@
         android:layout_height="40dp"
         android:layout_gravity="right"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:background="@android:drawable/ic_delete"
         android:onClick="onDelete" />
@@ -45,21 +47,21 @@
         android:id="@+id/open_location"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_below="@id/news"
         android:background="@android:drawable/ic_dialog_map"
-        android:onClick="open_location"/>
+        android:onClick="open_location"
+        android:layout_marginStart="8dp" />
 
     <Button
         android:id="@+id/share_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="10dp"
-        android:layout_below="@id/open_location"
         android:background="@android:drawable/ic_menu_share"
-        android:onClick="share_news"/>
+        android:onClick="share_news" />
 
 </LinearLayout>
